@@ -1,7 +1,6 @@
 
 ### Questions
-- polynomial vs sigmoid kernels
-- rbf (radial basis function) is a goto...why? see it more often and says it in the lab and lesson
+* 
 
 ### Objectives
 YWBAT
@@ -13,6 +12,17 @@ YWBAT
 - Introduce dataset
 - Go through various svm models and their use case
 - Tweak SVMs to suit the problem
+
+### What do SVMs do?
+SVMs (Support Vector Machines) are machine learning models that divide data by using 'support vectors' to create decision boundaries. 
+
+The sensitivity (or lack thereof) of your boundaries depends on you. 
+
+Low Sensitivity boundaries are often wide
+High Sensitivity boundaries are very narrow
+
+
+### The 'Vector' Part of SVMs is the data. (x-values).
 
 ### When? Why?
 
@@ -44,8 +54,8 @@ def plot_groups(x, y):
     plt.figure(figsize=(8, 8))
     plt.grid(linestyle='dashed')
     color_dict = {0: 'g', 1: 'purple'}
-    for data, label in zip(x, y):
-        plt.scatter(data[0], data[1], c=color_dict[label], alpha=0.5, s=60)
+    colors = ['g' if l == 0 else 'purple' for l in y]
+    plt.scatter(x[:, 0], x[:, 1], c=colors, s=60, alpha=0.5)
     plt.xlabel("X1")
     plt.ylabel("X2")
     plt.show()
@@ -55,8 +65,8 @@ def plot_groups3(x, y):
     plt.figure(figsize=(8, 8))
     plt.grid(linestyle='dashed')
     color_dict = {0: 'g', 1: 'purple', 2: 'yellow'}
-    for data, label in zip(x, y):
-        plt.scatter(data[0], data[1], c=color_dict[label], alpha=0.5, s=60)
+    colors = [color_dict[l] for l in y]
+    plt.scatter(x[:, 0], x[:, 1], c=colors, alpha=0.5, s=60)
     plt.xlabel("X1")
     plt.ylabel("X2")
     plt.show()
@@ -100,7 +110,7 @@ plot_groups(x, y)
 ```
 
 
-![png](lesson-plan_files/lesson-plan_8_0.png)
+![png](lesson-plan_files/lesson-plan_9_0.png)
 
 
 
@@ -108,13 +118,21 @@ plot_groups(x, y)
 xtrain, xtest, ytrain, ytest = train_test_split(x, y)
 ```
 
+# SVMs are a family of models
+* kernels
+    * linear kernel
+    * sigmoid kernel
+    * polynomial kernel
+    * rbf (radial basis function)
+        * maps data into higher dimension
+
 
 ```python
 clf = LinearSVC()
 clf.fit(xtrain, ytrain)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+    /Users/rafael/anaconda3/envs/flatiron-env/lib/python3.6/site-packages/sklearn/svm/_base.py:947: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
       "the number of iterations.", ConvergenceWarning)
 
 
@@ -134,7 +152,7 @@ plot_svm_groups(x, y, clf)
 ```
 
 
-![png](lesson-plan_files/lesson-plan_11_0.png)
+![png](lesson-plan_files/lesson-plan_13_0.png)
 
 
 
@@ -147,38 +165,38 @@ plot_svm_groups(x, y, clf)
 print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+    /Users/rafael/anaconda3/envs/flatiron-env/lib/python3.6/site-packages/sklearn/svm/_base.py:947: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
       "the number of iterations.", ConvergenceWarning)
 
 
 
-![png](lesson-plan_files/lesson-plan_12_1.png)
+![png](lesson-plan_files/lesson-plan_14_1.png)
 
 
     Train Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.97      0.96      0.96       184
-               1       0.96      0.97      0.97       191
+               0       0.95      0.95      0.95       185
+               1       0.95      0.95      0.95       190
     
-        accuracy                           0.97       375
-       macro avg       0.97      0.97      0.97       375
-    weighted avg       0.97      0.97      0.97       375
+        accuracy                           0.95       375
+       macro avg       0.95      0.95      0.95       375
+    weighted avg       0.95      0.95      0.95       375
     
-    Train Accuracy: 0.9653333333333334
+    Train Accuracy: 0.9493333333333334
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.98      0.98      0.98        66
-               1       0.98      0.98      0.98        59
+               0       0.97      0.94      0.95        65
+               1       0.94      0.97      0.95        60
     
-        accuracy                           0.98       125
-       macro avg       0.98      0.98      0.98       125
-    weighted avg       0.98      0.98      0.98       125
+        accuracy                           0.95       125
+       macro avg       0.95      0.95      0.95       125
+    weighted avg       0.95      0.95      0.95       125
     
-    Test Accuracy: 0.984
+    Test Accuracy: 0.952
 
 
 
@@ -191,38 +209,34 @@ plot_svm_groups(x, y, clf)
 print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
 
-
-
-![png](lesson-plan_files/lesson-plan_13_1.png)
+![png](lesson-plan_files/lesson-plan_15_0.png)
 
 
     Train Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.90      0.91      0.91       184
-               1       0.92      0.91      0.91       191
+               0       0.92      0.92      0.92       185
+               1       0.92      0.93      0.92       190
     
-        accuracy                           0.91       375
-       macro avg       0.91      0.91      0.91       375
-    weighted avg       0.91      0.91      0.91       375
+        accuracy                           0.92       375
+       macro avg       0.92      0.92      0.92       375
+    weighted avg       0.92      0.92      0.92       375
     
-    Train Accuracy: 0.9093333333333333
+    Train Accuracy: 0.9226666666666666
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.93      0.97      0.95        66
-               1       0.96      0.92      0.94        59
+               0       0.92      0.91      0.91        65
+               1       0.90      0.92      0.91        60
     
-        accuracy                           0.94       125
-       macro avg       0.95      0.94      0.94       125
-    weighted avg       0.94      0.94      0.94       125
+        accuracy                           0.91       125
+       macro avg       0.91      0.91      0.91       125
+    weighted avg       0.91      0.91      0.91       125
     
-    Test Accuracy: 0.944
+    Test Accuracy: 0.912
 
 
 
@@ -235,39 +249,39 @@ plot_svm_groups(x, y, clf)
 print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
 
-
-
-![png](lesson-plan_files/lesson-plan_14_1.png)
+![png](lesson-plan_files/lesson-plan_16_0.png)
 
 
     Train Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.96      0.97      0.96       184
-               1       0.97      0.96      0.96       191
+               0       0.89      0.98      0.93       185
+               1       0.98      0.88      0.93       190
     
-        accuracy                           0.96       375
-       macro avg       0.96      0.96      0.96       375
-    weighted avg       0.96      0.96      0.96       375
+        accuracy                           0.93       375
+       macro avg       0.93      0.93      0.93       375
+    weighted avg       0.93      0.93      0.93       375
     
-    Train Accuracy: 0.9626666666666667
+    Train Accuracy: 0.928
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.96      0.98      0.97        66
-               1       0.98      0.95      0.97        59
+               0       0.94      0.97      0.95        65
+               1       0.97      0.93      0.95        60
     
-        accuracy                           0.97       125
-       macro avg       0.97      0.97      0.97       125
-    weighted avg       0.97      0.97      0.97       125
+        accuracy                           0.95       125
+       macro avg       0.95      0.95      0.95       125
+    weighted avg       0.95      0.95      0.95       125
     
-    Test Accuracy: 0.968
+    Test Accuracy: 0.952
 
+
+### let's look at RBF (Radial Basis Function)
+- most popular svm 
+- project your data into a higher dimension and separate it there
 
 
 ```python
@@ -279,38 +293,34 @@ plot_svm_groups(x, y, clf)
 print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
 
-
-
-![png](lesson-plan_files/lesson-plan_15_1.png)
+![png](lesson-plan_files/lesson-plan_18_0.png)
 
 
     Train Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.99      0.97      0.98       184
-               1       0.97      0.99      0.98       191
+               0       0.95      0.95      0.95       185
+               1       0.95      0.95      0.95       190
     
-        accuracy                           0.98       375
-       macro avg       0.98      0.98      0.98       375
-    weighted avg       0.98      0.98      0.98       375
+        accuracy                           0.95       375
+       macro avg       0.95      0.95      0.95       375
+    weighted avg       0.95      0.95      0.95       375
     
-    Train Accuracy: 0.984
+    Train Accuracy: 0.9493333333333334
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.97      0.94      0.95        66
-               1       0.93      0.97      0.95        59
+               0       0.97      0.95      0.96        65
+               1       0.95      0.97      0.96        60
     
-        accuracy                           0.95       125
-       macro avg       0.95      0.95      0.95       125
-    weighted avg       0.95      0.95      0.95       125
+        accuracy                           0.96       125
+       macro avg       0.96      0.96      0.96       125
+    weighted avg       0.96      0.96      0.96       125
     
-    Test Accuracy: 0.952
+    Test Accuracy: 0.96
 
 
 
@@ -328,38 +338,49 @@ print_report(ytrain, ytest, ytrain_pred, ytest_pred)
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.90      0.90      0.90       184
-               1       0.90      0.90      0.90       191
+               0       0.95      0.95      0.95       185
+               1       0.95      0.95      0.95       190
     
-        accuracy                           0.90       375
-       macro avg       0.90      0.90      0.90       375
-    weighted avg       0.90      0.90      0.90       375
+        accuracy                           0.95       375
+       macro avg       0.95      0.95      0.95       375
+    weighted avg       0.95      0.95      0.95       375
     
-    Train Accuracy: 0.8986666666666666
+    Train Accuracy: 0.9493333333333334
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.92      0.89      0.91        66
-               1       0.89      0.92      0.90        59
+               0       0.97      0.95      0.96        65
+               1       0.95      0.97      0.96        60
     
-        accuracy                           0.90       125
-       macro avg       0.90      0.90      0.90       125
-    weighted avg       0.90      0.90      0.90       125
+        accuracy                           0.96       125
+       macro avg       0.96      0.96      0.96       125
+    weighted avg       0.96      0.96      0.96       125
     
-    Test Accuracy: 0.904
+    Test Accuracy: 0.96
 
 
 
 ```python
-clf.coef_
-clf.decision_function([[-1, 0]])
+clf.predict(np.array([[0, 5]]))
 ```
 
 
 
 
-    array([0.40881214])
+    array([0])
+
+
+
+
+```python
+clf.decision_function(np.array([[-20, 20]]))
+```
+
+
+
+
+    array([-0.15603795])
 
 
 
@@ -373,17 +394,18 @@ clf.decision_function([[-1, 0]])
 
 
 ```python
-x, y = make_circles(n_samples=2000, shuffle=True, noise=0.05)
-```
-
-
-```python
+x, y = make_circles(n_samples=2000, shuffle=True, noise=0.1)
 plot_groups(x, y)
 ```
 
 
-![png](lesson-plan_files/lesson-plan_22_0.png)
+![png](lesson-plan_files/lesson-plan_25_0.png)
 
+
+
+```python
+
+```
 
 
 ```python
@@ -403,31 +425,31 @@ print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
 
-![png](lesson-plan_files/lesson-plan_25_0.png)
+![png](lesson-plan_files/lesson-plan_29_0.png)
 
 
     Train Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.53      0.37      0.44       746
-               1       0.52      0.68      0.59       754
+               0       0.50      0.56      0.52       751
+               1       0.49      0.44      0.46       749
     
-        accuracy                           0.52      1500
-       macro avg       0.53      0.52      0.51      1500
-    weighted avg       0.53      0.52      0.51      1500
+        accuracy                           0.50      1500
+       macro avg       0.50      0.50      0.49      1500
+    weighted avg       0.50      0.50      0.49      1500
     
-    Train Accuracy: 0.5246666666666666
+    Train Accuracy: 0.49533333333333335
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.50      0.37      0.43       254
-               1       0.49      0.62      0.54       246
+               0       0.49      0.55      0.52       249
+               1       0.49      0.43      0.46       251
     
         accuracy                           0.49       500
        macro avg       0.49      0.49      0.49       500
-    weighted avg       0.49      0.49      0.48       500
+    weighted avg       0.49      0.49      0.49       500
     
     Test Accuracy: 0.492
 
@@ -444,38 +466,34 @@ plot_svm_groups(x, y, clf)
 print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
 
-
-
-![png](lesson-plan_files/lesson-plan_27_1.png)
+![png](lesson-plan_files/lesson-plan_31_0.png)
 
 
     Train Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.97      0.97      0.97       746
-               1       0.97      0.97      0.97       754
+               0       0.84      0.85      0.85       751
+               1       0.85      0.84      0.84       749
     
-        accuracy                           0.97      1500
-       macro avg       0.97      0.97      0.97      1500
-    weighted avg       0.97      0.97      0.97      1500
+        accuracy                           0.85      1500
+       macro avg       0.85      0.85      0.85      1500
+    weighted avg       0.85      0.85      0.85      1500
     
-    Train Accuracy: 0.9713333333333334
+    Train Accuracy: 0.846
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.98      0.97      0.97       254
-               1       0.97      0.98      0.97       246
+               0       0.80      0.83      0.81       249
+               1       0.82      0.80      0.81       251
     
-        accuracy                           0.97       500
-       macro avg       0.97      0.97      0.97       500
-    weighted avg       0.97      0.97      0.97       500
+        accuracy                           0.81       500
+       macro avg       0.81      0.81      0.81       500
+    weighted avg       0.81      0.81      0.81       500
     
-    Test Accuracy: 0.974
+    Test Accuracy: 0.812
 
 
 ### Thoughts
@@ -495,7 +513,7 @@ plot_groups(x, y)
 ```
 
 
-![png](lesson-plan_files/lesson-plan_31_0.png)
+![png](lesson-plan_files/lesson-plan_35_0.png)
 
 
 
@@ -506,98 +524,6 @@ xtrain, xtest, ytrain, ytest = train_test_split(x, y)
 
 ```python
 clf = SVC(kernel='sigmoid')
-clf.fit(xtrain, ytrain)
-ytrain_pred = clf.predict(xtrain)
-ytest_pred = clf.predict(xtest)
-plot_svm_groups(x, y, clf)
-print_report(ytrain, ytest, ytrain_pred, ytest_pred)
-```
-
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
-
-
-
-![png](lesson-plan_files/lesson-plan_33_1.png)
-
-
-    Train Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.69      0.69      0.69       756
-               1       0.68      0.69      0.68       744
-    
-        accuracy                           0.69      1500
-       macro avg       0.69      0.69      0.69      1500
-    weighted avg       0.69      0.69      0.69      1500
-    
-    Train Accuracy: 0.686
-    Test Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.70      0.69      0.70       244
-               1       0.71      0.72      0.72       256
-    
-        accuracy                           0.71       500
-       macro avg       0.71      0.71      0.71       500
-    weighted avg       0.71      0.71      0.71       500
-    
-    Test Accuracy: 0.706
-
-
-### RBF
-
-
-```python
-clf = SVC(kernel='rbf')
-clf.fit(xtrain, ytrain)
-ytrain_pred = clf.predict(xtrain)
-ytest_pred = clf.predict(xtest)
-plot_svm_groups(x, y, clf)
-print_report(ytrain, ytest, ytrain_pred, ytest_pred)
-```
-
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
-
-
-
-![png](lesson-plan_files/lesson-plan_35_1.png)
-
-
-    Train Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       1.00      0.99      1.00       756
-               1       0.99      1.00      1.00       744
-    
-        accuracy                           1.00      1500
-       macro avg       1.00      1.00      1.00      1500
-    weighted avg       1.00      1.00      1.00      1500
-    
-    Train Accuracy: 0.9953333333333333
-    Test Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       1.00      0.99      0.99       244
-               1       0.99      1.00      0.99       256
-    
-        accuracy                           0.99       500
-       macro avg       0.99      0.99      0.99       500
-    weighted avg       0.99      0.99      0.99       500
-    
-    Test Accuracy: 0.994
-
-
-### Linear
-
-
-```python
-clf = LinearSVC()
 clf.fit(xtrain, ytrain)
 ytrain_pred = clf.predict(xtrain)
 ytest_pred = clf.predict(xtest)
@@ -613,187 +539,26 @@ print_report(ytrain, ytest, ytrain_pred, ytest_pred)
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.89      0.89      0.89       756
-               1       0.88      0.89      0.89       744
+               0       0.64      0.64      0.64       749
+               1       0.64      0.64      0.64       751
     
-        accuracy                           0.89      1500
-       macro avg       0.89      0.89      0.89      1500
-    weighted avg       0.89      0.89      0.89      1500
+        accuracy                           0.64      1500
+       macro avg       0.64      0.64      0.64      1500
+    weighted avg       0.64      0.64      0.64      1500
     
-    Train Accuracy: 0.8866666666666667
+    Train Accuracy: 0.6406666666666667
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.89      0.89      0.89       244
-               1       0.90      0.89      0.90       256
+               0       0.63      0.67      0.65       251
+               1       0.64      0.60      0.62       249
     
-        accuracy                           0.89       500
-       macro avg       0.89      0.89      0.89       500
-    weighted avg       0.89      0.89      0.89       500
+        accuracy                           0.64       500
+       macro avg       0.64      0.64      0.64       500
+    weighted avg       0.64      0.64      0.64       500
     
-    Test Accuracy: 0.894
-
-
-## Polynomial SVM
-
-
-```python
-clf = SVC(kernel='poly')
-clf.fit(xtrain, ytrain)
-ytrain_pred = clf.predict(xtrain)
-ytest_pred = clf.predict(xtest)
-plot_svm_groups(x, y, clf)
-print_report(ytrain, ytest, ytrain_pred, ytest_pred)
-```
-
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
-
-
-
-![png](lesson-plan_files/lesson-plan_39_1.png)
-
-
-    Train Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.99      0.87      0.93       756
-               1       0.88      0.99      0.93       744
-    
-        accuracy                           0.93      1500
-       macro avg       0.94      0.93      0.93      1500
-    weighted avg       0.94      0.93      0.93      1500
-    
-    Train Accuracy: 0.9306666666666666
-    Test Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.99      0.87      0.93       244
-               1       0.89      0.99      0.94       256
-    
-        accuracy                           0.93       500
-       macro avg       0.94      0.93      0.93       500
-    weighted avg       0.94      0.93      0.93       500
-    
-    Test Accuracy: 0.932
-
-
-###  Thoughts?
-
-
-```python
-x, y = make_blobs(n_samples=3000, n_features=2, centers=3, cluster_std=1.8)
-plot_groups3(x, y)
-```
-
-
-![png](lesson-plan_files/lesson-plan_41_0.png)
-
-
-## Let's try all types of SVMs
-
-
-```python
-xtrain, xtest, ytrain, ytest = train_test_split(x, y)
-```
-
-### Linear
-
-
-```python
-clf = SVC(kernel='poly', degree=1)
-clf.fit(xtrain, ytrain)
-ytrain_pred = clf.predict(xtrain)
-ytest_pred = clf.predict(xtest)
-plot_svm_groups(x, y, clf)
-print_report(ytrain, ytest, ytrain_pred, ytest_pred)
-```
-
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
-
-
-
-![png](lesson-plan_files/lesson-plan_45_1.png)
-
-
-    Train Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.99      0.98      0.99       758
-               1       0.98      0.99      0.99       741
-               2       1.00      1.00      1.00       751
-    
-        accuracy                           0.99      2250
-       macro avg       0.99      0.99      0.99      2250
-    weighted avg       0.99      0.99      0.99      2250
-    
-    Train Accuracy: 0.9911111111111112
-    Test Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.99      0.98      0.99       242
-               1       0.98      0.99      0.99       259
-               2       1.00      1.00      1.00       249
-    
-        accuracy                           0.99       750
-       macro avg       0.99      0.99      0.99       750
-    weighted avg       0.99      0.99      0.99       750
-    
-    Test Accuracy: 0.9906666666666667
-
-
-### Polynomial (3)
-
-
-```python
-clf = SVC(kernel='poly', degree=3)
-clf.fit(xtrain, ytrain)
-ytrain_pred = clf.predict(xtrain)
-ytest_pred = clf.predict(xtest)
-plot_svm_groups(x, y, clf)
-print_report(ytrain, ytest, ytrain_pred, ytest_pred)
-```
-
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
-
-
-
-![png](lesson-plan_files/lesson-plan_47_1.png)
-
-
-    Train Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.99      0.99      0.99       758
-               1       0.99      0.99      0.99       741
-               2       1.00      1.00      1.00       751
-    
-        accuracy                           0.99      2250
-       macro avg       0.99      0.99      0.99      2250
-    weighted avg       0.99      0.99      0.99      2250
-    
-    Train Accuracy: 0.9924444444444445
-    Test Scores
-    --------------------------------------------------
-                  precision    recall  f1-score   support
-    
-               0       0.98      0.99      0.99       242
-               1       0.99      0.99      0.99       259
-               2       1.00      1.00      1.00       249
-    
-        accuracy                           0.99       750
-       macro avg       0.99      0.99      0.99       750
-    weighted avg       0.99      0.99      0.99       750
-    
-    Test Accuracy: 0.992
+    Test Accuracy: 0.636
 
 
 ### RBF
@@ -808,8 +573,157 @@ plot_svm_groups(x, y, clf)
 print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
+
+![png](lesson-plan_files/lesson-plan_39_0.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       749
+               1       1.00      1.00      1.00       751
+    
+        accuracy                           1.00      1500
+       macro avg       1.00      1.00      1.00      1500
+    weighted avg       1.00      1.00      1.00      1500
+    
+    Train Accuracy: 0.9993333333333333
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       251
+               1       1.00      1.00      1.00       249
+    
+        accuracy                           1.00       500
+       macro avg       1.00      1.00      1.00       500
+    weighted avg       1.00      1.00      1.00       500
+    
+    Test Accuracy: 1.0
+
+
+### Linear
+
+
+```python
+clf = LinearSVC()
+clf.fit(xtrain, ytrain)
+ytrain_pred = clf.predict(xtrain)
+ytest_pred = clf.predict(xtest)
+plot_svm_groups(x, y, clf)
+print_report(ytrain, ytest, ytrain_pred, ytest_pred)
+```
+
+
+![png](lesson-plan_files/lesson-plan_41_0.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.88      0.88      0.88       749
+               1       0.88      0.88      0.88       751
+    
+        accuracy                           0.88      1500
+       macro avg       0.88      0.88      0.88      1500
+    weighted avg       0.88      0.88      0.88      1500
+    
+    Train Accuracy: 0.8833333333333333
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.86      0.84      0.85       251
+               1       0.85      0.86      0.85       249
+    
+        accuracy                           0.85       500
+       macro avg       0.85      0.85      0.85       500
+    weighted avg       0.85      0.85      0.85       500
+    
+    Test Accuracy: 0.852
+
+
+## Polynomial SVM
+
+
+```python
+clf = SVC(kernel='poly', degree=3, gamma='auto')
+clf.fit(xtrain, ytrain)
+ytrain_pred = clf.predict(xtrain)
+ytest_pred = clf.predict(xtest)
+plot_svm_groups(x, y, clf)
+print_report(ytrain, ytest, ytrain_pred, ytest_pred)
+```
+
+
+![png](lesson-plan_files/lesson-plan_43_0.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.99      0.88      0.93       749
+               1       0.89      0.99      0.94       751
+    
+        accuracy                           0.93      1500
+       macro avg       0.94      0.93      0.93      1500
+    weighted avg       0.94      0.93      0.93      1500
+    
+    Train Accuracy: 0.9333333333333333
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      0.84      0.91       251
+               1       0.86      1.00      0.92       249
+    
+        accuracy                           0.92       500
+       macro avg       0.93      0.92      0.92       500
+    weighted avg       0.93      0.92      0.92       500
+    
+    Test Accuracy: 0.916
+
+
+###  Thoughts?
+
+
+```python
+x, y = make_blobs(n_samples=3000, n_features=2, centers=3, cluster_std=1.8)
+plot_groups3(x, y)
+```
+
+
+![png](lesson-plan_files/lesson-plan_45_0.png)
+
+
+## Let's try all types of SVMs
+
+
+```python
+xtrain, xtest, ytrain, ytest = train_test_split(x, y)
+```
+
+### Linear
+
+
+```python
+for degree in range(1, 10):
+    print(f"degree = {degree}")
+    print("-"*50)
+    clf = SVC(kernel='poly', degree=degree)
+    clf.fit(xtrain, ytrain)
+    ytrain_pred = clf.predict(xtrain)
+    ytest_pred = clf.predict(xtest)
+    plot_svm_groups(x, y, clf)
+    print_report(ytrain, ytest, ytrain_pred, ytest_pred)
+    print("\n\n")
+```
+
+    degree = 1
+    --------------------------------------------------
 
 
 
@@ -820,28 +734,415 @@ print_report(ytrain, ytest, ytrain_pred, ytest_pred)
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.99      0.99      0.99       758
-               1       0.99      0.99      0.99       741
+               0       1.00      1.00      1.00       760
+               1       1.00      1.00      1.00       739
                2       1.00      1.00      1.00       751
     
-        accuracy                           0.99      2250
-       macro avg       0.99      0.99      0.99      2250
-    weighted avg       0.99      0.99      0.99      2250
+        accuracy                           1.00      2250
+       macro avg       1.00      1.00      1.00      2250
+    weighted avg       1.00      1.00      1.00      2250
     
-    Train Accuracy: 0.9928888888888889
+    Train Accuracy: 0.9991111111111111
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.98      0.99      0.99       242
-               1       0.99      0.98      0.99       259
+               0       1.00      1.00      1.00       240
+               1       1.00      1.00      1.00       261
+               2       1.00      1.00      1.00       249
+    
+        accuracy                           1.00       750
+       macro avg       1.00      1.00      1.00       750
+    weighted avg       1.00      1.00      1.00       750
+    
+    Test Accuracy: 1.0
+    
+    
+    
+    degree = 2
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_3.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.94      0.96      0.95       760
+               1       0.92      0.90      0.91       739
+               2       0.96      0.96      0.96       751
+    
+        accuracy                           0.94      2250
+       macro avg       0.94      0.94      0.94      2250
+    weighted avg       0.94      0.94      0.94      2250
+    
+    Train Accuracy: 0.9404444444444444
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.94      0.95      0.95       240
+               1       0.93      0.89      0.91       261
+               2       0.94      0.97      0.96       249
+    
+        accuracy                           0.94       750
+       macro avg       0.94      0.94      0.94       750
+    weighted avg       0.94      0.94      0.94       750
+    
+    Test Accuracy: 0.9373333333333334
+    
+    
+    
+    degree = 3
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_5.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       760
+               1       1.00      1.00      1.00       739
+               2       1.00      1.00      1.00       751
+    
+        accuracy                           1.00      2250
+       macro avg       1.00      1.00      1.00      2250
+    weighted avg       1.00      1.00      1.00      2250
+    
+    Train Accuracy: 0.9991111111111111
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       240
+               1       1.00      1.00      1.00       261
+               2       1.00      1.00      1.00       249
+    
+        accuracy                           1.00       750
+       macro avg       1.00      1.00      1.00       750
+    weighted avg       1.00      1.00      1.00       750
+    
+    Test Accuracy: 0.9986666666666667
+    
+    
+    
+    degree = 4
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_7.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.93      0.96      0.95       760
+               1       0.93      0.87      0.90       739
+               2       0.95      0.97      0.96       751
+    
+        accuracy                           0.93      2250
+       macro avg       0.93      0.93      0.93      2250
+    weighted avg       0.93      0.93      0.93      2250
+    
+    Train Accuracy: 0.9337777777777778
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.93      0.97      0.95       240
+               1       0.95      0.85      0.90       261
+               2       0.92      0.98      0.95       249
+    
+        accuracy                           0.93       750
+       macro avg       0.93      0.94      0.93       750
+    weighted avg       0.93      0.93      0.93       750
+    
+    Test Accuracy: 0.9333333333333333
+    
+    
+    
+    degree = 5
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_9.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       760
+               1       1.00      0.99      0.99       739
+               2       0.99      1.00      0.99       751
+    
+        accuracy                           1.00      2250
+       macro avg       1.00      1.00      1.00      2250
+    weighted avg       1.00      1.00      1.00      2250
+    
+    Train Accuracy: 0.9951111111111111
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.98      1.00      0.99       240
+               1       1.00      0.98      0.99       261
                2       1.00      1.00      1.00       249
     
         accuracy                           0.99       750
        macro avg       0.99      0.99      0.99       750
     weighted avg       0.99      0.99      0.99       750
     
-    Test Accuracy: 0.9906666666666667
+    Test Accuracy: 0.9946666666666667
+    
+    
+    
+    degree = 6
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_11.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.91      0.97      0.94       760
+               1       0.94      0.82      0.88       739
+               2       0.93      0.97      0.95       751
+    
+        accuracy                           0.92      2250
+       macro avg       0.93      0.92      0.92      2250
+    weighted avg       0.92      0.92      0.92      2250
+    
+    Train Accuracy: 0.924
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.90      0.98      0.94       240
+               1       0.96      0.81      0.88       261
+               2       0.91      0.98      0.94       249
+    
+        accuracy                           0.92       750
+       macro avg       0.92      0.92      0.92       750
+    weighted avg       0.92      0.92      0.92       750
+    
+    Test Accuracy: 0.9213333333333333
+    
+    
+    
+    degree = 7
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_13.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.99      0.99      0.99       760
+               1       1.00      0.96      0.98       739
+               2       0.97      1.00      0.98       751
+    
+        accuracy                           0.98      2250
+       macro avg       0.98      0.98      0.98      2250
+    weighted avg       0.98      0.98      0.98      2250
+    
+    Train Accuracy: 0.984
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.99      0.99      0.99       240
+               1       1.00      0.95      0.98       261
+               2       0.96      1.00      0.98       249
+    
+        accuracy                           0.98       750
+       macro avg       0.98      0.98      0.98       750
+    weighted avg       0.98      0.98      0.98       750
+    
+    Test Accuracy: 0.9813333333333333
+    
+    
+    
+    degree = 8
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_15.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.89      0.96      0.92       760
+               1       0.95      0.77      0.85       739
+               2       0.88      0.98      0.93       751
+    
+        accuracy                           0.90      2250
+       macro avg       0.91      0.90      0.90      2250
+    weighted avg       0.91      0.90      0.90      2250
+    
+    Train Accuracy: 0.9017777777777778
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.89      0.97      0.93       240
+               1       0.98      0.75      0.85       261
+               2       0.85      0.99      0.92       249
+    
+        accuracy                           0.90       750
+       macro avg       0.91      0.90      0.90       750
+    weighted avg       0.91      0.90      0.90       750
+    
+    Test Accuracy: 0.9013333333333333
+    
+    
+    
+    degree = 9
+    --------------------------------------------------
+
+
+
+![png](lesson-plan_files/lesson-plan_49_17.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.98      0.99      0.99       760
+               1       1.00      0.94      0.97       739
+               2       0.96      1.00      0.98       751
+    
+        accuracy                           0.98      2250
+       macro avg       0.98      0.98      0.98      2250
+    weighted avg       0.98      0.98      0.98      2250
+    
+    Train Accuracy: 0.9777777777777777
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       0.96      0.99      0.98       240
+               1       1.00      0.92      0.96       261
+               2       0.95      1.00      0.97       249
+    
+        accuracy                           0.97       750
+       macro avg       0.97      0.97      0.97       750
+    weighted avg       0.97      0.97      0.97       750
+    
+    Test Accuracy: 0.9693333333333334
+    
+    
+    
+
+
+### Polynomial (3)
+
+
+```python
+clf = SVC(kernel='poly', degree=3)
+clf.fit(xtrain, ytrain)
+ytrain_pred = clf.predict(xtrain)
+ytest_pred = clf.predict(xtest)
+plot_svm_groups(x, y, clf)
+print_report(ytrain, ytest, ytrain_pred, ytest_pred)
+```
+
+
+![png](lesson-plan_files/lesson-plan_51_0.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       760
+               1       1.00      1.00      1.00       739
+               2       1.00      1.00      1.00       751
+    
+        accuracy                           1.00      2250
+       macro avg       1.00      1.00      1.00      2250
+    weighted avg       1.00      1.00      1.00      2250
+    
+    Train Accuracy: 0.9991111111111111
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       240
+               1       1.00      1.00      1.00       261
+               2       1.00      1.00      1.00       249
+    
+        accuracy                           1.00       750
+       macro avg       1.00      1.00      1.00       750
+    weighted avg       1.00      1.00      1.00       750
+    
+    Test Accuracy: 0.9986666666666667
+
+
+### RBF
+
+
+```python
+clf = SVC(kernel='rbf')
+clf.fit(xtrain, ytrain)
+ytrain_pred = clf.predict(xtrain)
+ytest_pred = clf.predict(xtest)
+plot_svm_groups(x, y, clf)
+print_report(ytrain, ytest, ytrain_pred, ytest_pred)
+```
+
+
+![png](lesson-plan_files/lesson-plan_53_0.png)
+
+
+    Train Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       760
+               1       1.00      1.00      1.00       739
+               2       1.00      1.00      1.00       751
+    
+        accuracy                           1.00      2250
+       macro avg       1.00      1.00      1.00      2250
+    weighted avg       1.00      1.00      1.00      2250
+    
+    Train Accuracy: 0.9991111111111111
+    Test Scores
+    --------------------------------------------------
+                  precision    recall  f1-score   support
+    
+               0       1.00      1.00      1.00       240
+               1       1.00      1.00      1.00       261
+               2       1.00      1.00      1.00       249
+    
+        accuracy                           1.00       750
+       macro avg       1.00      1.00      1.00       750
+    weighted avg       1.00      1.00      1.00       750
+    
+    Test Accuracy: 1.0
 
 
 ### Sigmoidal
@@ -856,40 +1157,36 @@ plot_svm_groups(x, y, clf)
 print_report(ytrain, ytest, ytrain_pred, ytest_pred)
 ```
 
-    /anaconda3/lib/python3.7/site-packages/sklearn/svm/base.py:193: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-      "avoid this warning.", FutureWarning)
 
-
-
-![png](lesson-plan_files/lesson-plan_51_1.png)
+![png](lesson-plan_files/lesson-plan_55_0.png)
 
 
     Train Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.51      0.99      0.67       758
-               1       0.78      0.02      0.04       741
-               2       1.00      0.99      1.00       751
+               0       1.00      1.00      1.00       760
+               1       1.00      1.00      1.00       739
+               2       1.00      1.00      1.00       751
     
-        accuracy                           0.67      2250
-       macro avg       0.76      0.67      0.57      2250
-    weighted avg       0.76      0.67      0.57      2250
+        accuracy                           1.00      2250
+       macro avg       1.00      1.00      1.00      2250
+    weighted avg       1.00      1.00      1.00      2250
     
-    Train Accuracy: 0.6728888888888889
+    Train Accuracy: 0.9991111111111111
     Test Scores
     --------------------------------------------------
                   precision    recall  f1-score   support
     
-               0       0.48      1.00      0.65       242
-               1       1.00      0.01      0.02       259
-               2       1.00      0.99      1.00       249
+               0       1.00      1.00      1.00       240
+               1       1.00      1.00      1.00       261
+               2       1.00      1.00      1.00       249
     
-        accuracy                           0.65       750
-       macro avg       0.83      0.67      0.55       750
-    weighted avg       0.83      0.65      0.55       750
+        accuracy                           1.00       750
+       macro avg       1.00      1.00      1.00       750
+    weighted avg       1.00      1.00      1.00       750
     
-    Test Accuracy: 0.6546666666666666
+    Test Accuracy: 1.0
 
 
 ### Assessment
